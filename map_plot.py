@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Fri May  6 11:46:53 2016
+
+@author: Ajoo
+"""
+
 from tkinter import *
 
 class HexaCanvas(Canvas):
@@ -15,23 +22,17 @@ class HexaCanvas(Canvas):
         """ 
         Compute coordinates of 6 points relative to a center position.
         Point are numbered following this schema :
-
         Points in euclidiean grid:  
                     6
-
                 5       1
                     .
                 4       2
-
                     3
-
         Each color is applied to the side that link the vertex with same number to its following.
         Ex : color 1 is applied on side (vertex1, vertex2)
-
         Take care that tkinter ordinate axes is inverted to the standard euclidian ones.
         Point on the screen will be horizontally mirrored.
         Displayed points:
-
                     3
               color3/      \color2      
                 4       2
@@ -39,7 +40,6 @@ class HexaCanvas(Canvas):
                 5       1
               color6\      /color6
                     6
-
         """
         size = self.hexaSize
         dx = (size**2 - (size/2)**2)**0.5
@@ -102,16 +102,31 @@ class HexagonalGrid(HexaCanvas):
         self.create_hexagone(pix_x, pix_y, *args, **kwargs)
 
 
+def correct_quit(tk):
+    tk.destroy()
+    tk.quit()
+
+colors = ["white", "blue", "yellow", "red", "teal", "gray", "#735a45", "black", "green"]
+def plot_hex(array, cmap=colors):
+    tk = Tk()
+    
+    grid = HexagonalGrid(tk, scale = 50, grid_width=array.shape[1], grid_height=array.shape[0])
+    grid.grid(row=0, column=0, padx=5, pady=5)
+    
+    quit = Button(tk, text = "Quit", command = lambda :correct_quit(tk))
+    quit.grid(row=1, column=0)
+    
+    for i in range(array.shape[0]):
+        for j in range(array.shape[1]):
+            grid.setCell(j, i, fill=cmap[array[i,j]])
+    
+    tk.mainloop()
 
 if __name__ == "__main__":
     tk = Tk()
 
     grid = HexagonalGrid(tk, scale = 50, grid_width=4, grid_height=4)
     grid.grid(row=0, column=0, padx=5, pady=5)
-
-    def correct_quit(tk):
-        tk.destroy()
-        tk.quit()
 
     quit = Button(tk, text = "Quit", command = lambda :correct_quit(tk))
     quit.grid(row=1, column=0)
